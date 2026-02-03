@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQL Injection</title>
+    <style>
+        /* Reset and font settings */
+        * { margin: 0;
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: sans-serif; }
+
+        /* Basic background and text color for the body */
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, rgb(15, 23, 42), rgb(30, 41, 59));
+            color: rgb(215, 221, 225);
+        }
+
+        /* Navigation bar at the top */
+        nav {
+            background: rgba(30, 41, 59, 0.95);
+            padding: 20px;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .logo { font-size: 24px; 
+            font-weight: 700; 
+            color: rgb(138, 92, 245); 
+        }
+
+        /* Section styling */
+        .section {
+            max-width: 800px;
+            margin: 100px auto 0;
+            background: rgba(30, 41, 59, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        h1 { text-align: center; 
+            color: white; 
+            margin-bottom: 20px; 
+        }
+
+        /* Input and button styling */
+        textarea, input {
+            width: 100%;
+            padding: 10px;
+            background: rgb(30, 41, 59);
+            border: 2px solid rgb(139, 92, 246);
+            border-radius: 8px;
+            color: rgb(226, 232, 240);
+            margin-bottom: 15px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background: rgb(139, 92, 246);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+        }
+
+        .result { margin-top: 20px; padding: 15px; border-radius: 8px; }
+        .safe { background: rgb(74, 222, 128); color: white; }
+        .unsafe { background: rgb(248, 113, 113); color: white; }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-content">
+            <div class="logo">SQL Injection</div>
+        </div>
+    </nav>
+
+    <!-- Home Section -->
+    <div id="home" class="section">
+        <h1>Search Engine</h1>
+        <textarea id="sqlQuery" placeholder="Enter your SQL query here..."></textarea>
+        <button onclick="validateQuery()">Validate Query</button>
+        <div id="result" class="result"></div>
+    </div>
+
+    <script>
+        // Validate SQL query for potential injection patterns
+        function validateQuery() {
+            const query = document.getElementById('sqlQuery').value.toLowerCase();
+            const result = document.getElementById('result');
+            
+            // List of suspicious SQL patterns
+            const suspiciousPatterns = ['--', ';', 'union', 'drop', 'delete', '1=1', 'or 1'];
+
+            // Check if query contains any suspicious pattern
+            const isSuspicious = suspiciousPatterns.some(pattern => query.includes(pattern));
+
+            // Display result based on validation
+            result.className = 'result ' + (isSuspicious ? 'unsafe' : 'safe');
+            result.innerText = isSuspicious 
+                ? "Warning: Potential SQL Injection Detected!" 
+                : "Query appears to be safe.";
+        }
+    </script>
+</body>
+</html>
